@@ -1,8 +1,9 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const uuid = require('uuid/v1');
 
-const { readFromFile, readAndAppend } = require('./helpers/fsUtils');
+const { readFromFile, writeToFile, readAndAppend } = require('./helpers/fsUtils');
 
 const PORT = process.env.PORT || 3001;
 
@@ -18,11 +19,6 @@ app.get('/', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/index.html'))
 );
 
-// GET route to catch all
-app.get('*', (req, res) =>
-    res.sendFile(path.join(__dirname, '/public/index.html'))
-);
-
 // GET route for notes page
 app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/notes.html'))
@@ -34,6 +30,11 @@ app.get('/api/notes', (req, res) => {
     readFromFile('./db/notes.json').then((data) => res.json(JSON.parse(data)));
 });
 
+// GET route to catch all
+app.get('*', (req, res) =>
+    res.sendFile(path.join(__dirname, '/public/index.html'))
+);
+
 // POST route for adding to database
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a note`);
@@ -43,7 +44,8 @@ app.post('/api/notes', (req, res) => {
     if (req.body) {
         const newNote = {
             title,
-            text
+            text,
+            id : uuid()
         }
 
         readAndAppend(newNote, './db/notes.json');
@@ -54,8 +56,14 @@ app.post('/api/notes', (req, res) => {
 })
 
 // DELETE route for database content
-app.delete('/api/notes:id', (res, req) => {
-    
+app.delete('/api/notes/:id', (res, req) => {
+    readFromFile('./db/notes.json').then((data) => {
+        let parsedData = JSON.parse(data);
+        let filteredNotes = parsedData.filter((note) => {
+            return note.id !== req.params.id;
+        })
+        writeToFile('./db/notes.json', filteredNotes);
+    })
 })
 
 app.listen(PORT, () =>
