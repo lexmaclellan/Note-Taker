@@ -34,7 +34,7 @@ app.get('/api/notes', (req, res) => {
     readFromFile('./db/notes.json').then((data) => res.json(JSON.parse(data)));
 });
 
-// POST route adding to database
+// POST route for adding to database
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a note`);
 
@@ -51,6 +51,11 @@ app.post('/api/notes', (req, res) => {
     } else {
         res.error("Error in adding note");
     }
+})
+
+// DELETE route for database content
+app.delete('/api/notes:id', (res, req) => {
+    
 })
 
 app.listen(PORT, () =>
