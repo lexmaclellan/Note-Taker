@@ -1,17 +1,12 @@
 [
     {
-        "id": "1",
-        "title": "Test Title",
-        "text": "Test text"
-    },
-    {
-        "id": "2",
-        "title": "Testing title",
-        "text": "Testing text"
+        "title": "Title",
+        "text": "Text",
+        "id": "03469e00-244f-11ee-9379-7f68c5ffa1bd"
     },
     {
         "title": "New note",
-        "text": "testing",
-        "id": "cecb1570-2430-11ee-97e5-737fdc632758"
+        "text": "Reminder",
+        "id": "094fdff0-244f-11ee-9379-7f68c5ffa1bd"
     }
 ]

@@ -56,14 +56,16 @@ app.post('/api/notes', (req, res) => {
 })
 
 // DELETE route for database content
-app.delete('/api/notes/:id', (res, req) => {
+app.delete('/api/notes/:id', (req, res) => {
+    console.log(req.params.id);
     readFromFile('./db/notes.json').then((data) => {
         let parsedData = JSON.parse(data);
         let filteredNotes = parsedData.filter((note) => {
             return note.id !== req.params.id;
         })
         writeToFile('./db/notes.json', filteredNotes);
-    })
+    });
+    readFromFile('./db/notes.json').then((data) => res.json(JSON.parse(data)));
 })
 
 app.listen(PORT, () =>
